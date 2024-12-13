@@ -1,0 +1,13 @@
+{
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.compile.nullAnalysis.mode": "disabled",
+    "terminal.integrated.automationProfile.windows": {
+    "path": "powershell",
+    "args": [
+        "-NoExit",
+        "-Command",
+        "chcp",
+        "65001"
+    ]
+}   
+}
