@@ -27,6 +27,8 @@ dependencies {
     // Spring Boot starter for JPA (database interaction)
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
+
+
     // H2 Database (for in-memory DB, replace with MySQL or PostgreSQL if needed)
     runtimeOnly 'com.h2database:h2'
 
