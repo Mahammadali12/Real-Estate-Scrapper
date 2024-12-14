@@ -10,12 +10,10 @@ import java.util.Set;
 import org.jsoup.*; 
 import org.jsoup.nodes.*; 
 import org.jsoup.select.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import grad.model.Product;
-import grad.repository.ProductRepo;
 
 @SpringBootApplication
 public class App {
@@ -24,20 +22,6 @@ public class App {
     
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
-
-        Document doc;
-        try { 
-            doc = Jsoup 
-            .connect("https://bina.az/alqi-satqi") 
-            .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36") 
-            .header("Accept-Language", "*") 
-            .get();
-            
-            } catch (IOException e) { 
-            throw new RuntimeException(e); 
-            }
-
-
 
         List<String[]> listings = new ArrayList<>();
         Set<String> listingsDiscovered = new HashSet<>();
@@ -50,67 +34,10 @@ public class App {
         while (!listings.isEmpty()) {
             scrapeListing(listings,products);            
         }
-        
-        // scrapeListing(listings,products);
-        // scrapeListing(listings,products);
+
+        System.out.println("Finished Scraping");
 
     }
-
-    public static void scrapePaginationButtons(
-        List<String> paginations, 
-        Set<String> pagesDiscovered,
-        List<String> pagesToScrape
-        ) {
-
-            String url = pagesToScrape.remove(0);
-
-            pagesDiscovered.add(url);
-
-            Document doc;
-            try { 
-                doc = Jsoup 
-                .connect(url) 
-                .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36") 
-                .header("Accept-Language", "*") 
-                .get();
-                
-                } catch (IOException e) { 
-                throw new RuntimeException(e); 
-                }
-
-                // Elements productElements = doc.select("li.product");
-
-                // for(Element productElement : productElements){
-                //     Product Product = new Product();
-
-                //     // Product.setUrl(productElement.selectFirst("a").attr("href"));
-                //     // Product.setImage(productElement.selectFirst("img").attr("src"));
-                //     // Product.setName(productElement.selectFirst("h2").text());
-                //     // Product.setPrice(productElement.selectFirst("span").text());
-
-                //     products.add(Product);
-                // }
-
-                Elements paginationElements = doc.select("span.page");
-                
-                int j=0;
-                for(int i = 1; i<paginationElements.size();i++){
-                    String discoveredUrl = "https://bina.az"+paginationElements.get(i).select("a").attr("href");
-                    // System.out.println(paginationElements.get(i).text());
-                    // System.out.println(discoveredUrl);
-                    // System.out.println("-----------------------");
-
-                    if (!pagesDiscovered.contains(discoveredUrl) && !pagesToScrape.contains(discoveredUrl)) {
-                        pagesToScrape.add(discoveredUrl);
-                    }
-
-                    pagesDiscovered.add(discoveredUrl);
-                }
-
-                System.out.println(" scraping ---->" + url );
-                paginations.add(url);
-    }
-
 
     public static void scrapeListingLinks(
         List<String[]> listings,
